@@ -1,8 +1,212 @@
 ﻿@{
-    ViewData["Title"] = "Event Page";
+    ViewData["Title"] = "Create Event";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome To Event Page</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container">
+    <div class="text-center">
+        <div id="page1">
+            <h1 class="display-4">Create Event</h1>
+            <form class="row g-3">
+                <div class="col-md-6 offset-md-3">
+                    <label for="eventName" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="eventName">
+                </div>
+                <div class="col-md-6 offset-md-3">
+                    <label for="eventDescription" class="form-label">Description</label>
+                    <input type="text" class="form-control" id="eventDescription">
+                </div>
+                <div class="col-md-6 offset-md-3">
+                    <label for="eventDuration" class="form-label">Duration</label>
+                    <input type="number" class="form-control" id="eventDuration">
+                </div>
+                <div class="col-12 text-center">
+                    <button type="button" class="btn btn-primary" onclick="nextPage()">Next</button>
+                </div>
+            </form>
+        </div>
+        <div id="page2" style="display: none;">
+            <h1 class="display-4">Add Sponsors</h1>
+            <div id="sponsorForm">
+                <!-- Sponsor input fields will be added dynamically here -->
+            </div>
+            <button type="button" class="btn btn-primary" onclick="prevPage()">Previous</button>
+            <button type="button" class="btn btn-primary" onclick="addSponsor()">Add Sponsor</button>
+            <button type="button" class="btn btn-primary" onclick="nextPage()">Next</button>
+        </div>
+        <div id="page3" style="display: none;">
+            <h1 class="display-4">Add Sessions</h1>
+            <div id="sessionForm">
+                <!-- Session input fields will be added dynamically here -->
+            </div>
+            <button type="button" class="btn btn-primary" onclick="prevPage()">Previous</button>
+                        <button type="button" class="btn btn-primary" onclick="addSession()">Add Session</button>
+            <button type="submit" class="btn btn-warning">Create</button>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        let sponsorCount = 0;
+        let sessionCount = 0;
+
+        function nextPage() {
+            if (document.getElementById('page1').style.display !== 'none') {
+                document.getElementById('page1').style.display = 'none';
+                document.getElementById('page2').style.display = 'block';
+            } else if (document.getElementById('page2').style.display !== 'none') {
+                document.getElementById('page2').style.display = 'none';
+                document.getElementById('page3').style.display = 'block';
+            }
+        }
+
+        function prevPage() {
+            if (document.getElementById('page2').style.display !== 'none') {
+                document.getElementById('page2').style.display = 'none';
+                document.getElementById('page1').style.display = 'block';
+            } else if (document.getElementById('page3').style.display !== 'none') {
+                document.getElementById('page3').style.display = 'none';
+                document.getElementById('page2').style.display = 'block';
+            }
+        }
+
+        function addSponsor() {
+            sponsorCount++;
+            let sponsorForm = document.getElementById('sponsorForm');
+
+            let sponsorHtml = `
+                <div class="row">
+                    <div class="col-md-6 offset-md-3">
+                        <h3>Sponsor ${sponsorCount}</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 offset-md-3">
+                        <label for="sponsorName${sponsorCount}" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="sponsorName${sponsorCount}">
+                    </div>
+                    <div class="col-md-6 offset-md-3">
+                        <label for="sponsorEmail${sponsorCount}" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="sponsorEmail${sponsorCount}">
+                    </div>
+                    <div class="col-md-6 offset-md-3">
+                        <label for="sponsorPhone${sponsorCount}" class="form-label">Phone Number</label>
+                        <input type="text" class="form-control" id="sponsorPhone${sponsorCount}">
+                    </div>
+                    <div class="col-md-6 offset-md-3">
+                        <label for="sponsorAddress${sponsorCount}" class="form-label">Address</label>
+                        <input type="text" class="form-control" id="sponsorAddress${sponsorCount}">
+                    </div>
+                    <div class="col-md-6 offset-md-3">
+                        <label for="sponsorContribution${sponsorCount}" class="form-label">Contribution</label>
+                        <input type="number" class="form-control" id="sponsorContribution${sponsorCount}">
+                    </div>
+                </div>
+            `;
+
+            sponsorForm.insertAdjacentHTML('beforeend', sponsorHtml);
+        }
+
+        function addSession() {
+            sessionCount++;
+            let sessionForm = document.getElementById('sessionForm');
+
+            let sessionHtml = `
+                <div class="row">
+                    <div class="col-md-6 offset-md-3">
+                        <h3>Session ${sessionCount}</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 offset-md-3">
+                        <label for="sessionName${sessionCount}" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="sessionName${sessionCount}">
+                    </div>
+                    <div class="col-md-6 offset-md-3">
+                        <label for="sessionDescription${sessionCount}" class="form-label">Description</label>
+                        <input type="text" class="form-control" id="sessionDescription${sessionCount}">
+                    </div>
+                    <div class="col-md-6 offset-md-3">
+                        <label for="speakerName${sessionCount}" class="form-label">Speaker Name</label>
+                        <input type="text" class="form-control" id="speakerName${sessionCount}">
+                    </div>
+                    <div class="col-md-6 offset-md-3">
+                        <label for="speakerEmail${sessionCount}" class="form-label">Speaker Email</label>
+                        <input type="email" class="form-control" id="speakerEmail${sessionCount}">
+                    </div>
+                    <div class="col-md-6 offset-md-3">
+                        <label for="speakerPhone${sessionCount}" class="form-label">Speaker Phone</label>
+                        <input type="text" class="form-control" id="speakerPhone${sessionCount}">
+                    </div>
+                    <div class="col-md-6 offset-md-3">
+                        <label for="agendaName${sessionCount}" class="form-label">Agenda Name</label>
+                        <input type="text" class="form-control" id="agendaName${sessionCount}">
+                    </div>
+                    <div class="col-md-6 offset-md-3">
+                        <label for="agendaDescription${sessionCount}" class="form-label">Agenda Description</label>
+                        <input type="text" class="form-control" id="agendaDescription${sessionCount}">
+                    </div>
+                    <div class="col-md-6 offset-md-3">
+                        <label for="startTime${sessionCount}" class="form-label">Start Time</label>
+                        <input type="text" class="form-control" id="startTime${sessionCount}">
+                    </div>
+                    <div class="col-md-6 offset-md-3">
+                        <label for="endTime${sessionCount}" class="form-label">End Time</label>
+                        <input type="text" class="form-control" id="endTime${sessionCount}">
+                    </div>
+                </div>
+            `;
+
+            sessionForm.insertAdjacentHTML('beforeend', sessionHtml);
+        }
+
+        // Handle form submission
+        document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Gather form data
+            let eventData = {
+                name: document.getElementById('eventName').value,
+                description: document.getElementById('eventDescription').value,
+                duration: document.getElementById('eventDuration').value,
+                sponsors: [],
+                sessions: []
+            };
+
+            let sponsorInputs = document.querySelectorAll('[id^=sponsorName]');
+            sponsorInputs.forEach(function(input) {
+                let index = input.id.slice(-1);
+                eventData.sponsors.push({
+                    name: document.getElementById(`sponsorName${index}`).value,
+                    email: document.getElementById(`sponsorEmail${index}`).value,
+                    phoneNumber: document.getElementById(`sponsorPhone${index}`).value,
+                    address: document.getElementById(`sponsorAddress${index}`).value,
+                    contribution: document.getElementById(`sponsorContribution${index}`).value
+                });
+            });
+
+            let sessionInputs = document.querySelectorAll('[id^=sessionName]');
+            sessionInputs.forEach(function(input) {
+                let index = input.id.slice(-1);
+                eventData.sessions.push({
+                    name: document.getElementById(`sessionName${index}`).value,
+                    description: document.getElementById(`sessionDescription${index}`).value,
+                    speaker: {
+                        name: document.getElementById(`speakerName${index}`).value,
+                        email: document.getElementById(`speakerEmail${index}`).value,
+                        phoneNumber: document.getElementById(`speakerPhone${index}`).value
+                    },
+                    agenda: {
+                        name: document.getElementById(`agendaName${index}`).value,
+                        description: document.getElementById(`agendaDescription${index}`).value,
+                        startTime: document.getElementById(`startTime${index}`).value,
+                        endTime: document.getElementById(`endTime${index}`).value
+                    }
+                });
+            });
+
+            // You can now submit this data to your server or handle it as needed
+            console.WriteLine(eventData);
+        });
+    </script>
+}
