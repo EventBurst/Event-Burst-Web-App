@@ -1,0 +1,6 @@
+﻿services:
+  event burst web appeventburstwebapp:
+    image: event burst web appeventburstwebapp
+    build:
+      context: .
+      dockerfile: Dockerfile
