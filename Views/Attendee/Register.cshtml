@@ -1,5 +1,5 @@
 @{
-    ViewData["Title"] = "Attendee Registeration";
+    ViewData["Title"] = "Attendee Registration";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -9,7 +9,7 @@
         <div class="col-md-6">
             <form id='registerForm'>
                 <div class="mb-3">
-                    <label for="name" class="form-label">Name</label>
+                    <label for="fullName" class="form-label">Name</label>
                     <input type="text" class="form-control" id="fullName">
                 </div>
                 <div class="mb-3">
@@ -29,7 +29,7 @@
                     <input type="password" class="form-control" id="password">
                 </div>
                 <div class="text-center">
-                    <button class="btn btn-primary" onclick="submitForm()">Register</button>
+                    <button type="button" class="btn btn-primary" onclick="submitForm()">Register</button>
                 </div>
             </form>
         </div>
@@ -39,9 +39,8 @@
 @section Scripts {
     <script>
         function submitForm() {
-            console.log("AAGyaa")
             // Get form data
-            var name = document.getElementById('name').value;
+            var name = document.getElementById('fullName').value;
             var email = document.getElementById('email').value;
             var phoneNumber = document.getElementById('phoneNumber').value;
             var address = document.getElementById('address').value;
@@ -55,7 +54,7 @@
                 address: address,
                 password: password
             };
-            console.log(data)
+
             // Construct API URL
             var apiUrl = 'http://localhost:8003/api/legendary-octo-events/attendee/create';
 
@@ -77,10 +76,11 @@
                     // Successful registration
                     console.log('Registration successful');
                     showAlert('Registration successful', 'alert-success');
+                    window.location.href = '/Attendee/Login';
                 })
                 .catch(error => {
                     // Failed registration
-                    console.error('Registration failed:', error);
+                    console.log('Registration failed:', error);
                     showAlert('Registration failed', 'alert-danger');
                 });
         }

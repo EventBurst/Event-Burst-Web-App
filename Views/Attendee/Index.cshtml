@@ -56,5 +56,12 @@
             <a href="/Attendee/ExploreEvent" class="button">Explore Events</a>
         </header>
     </div>
+    <script>
+        // Check if the cookie 'accessToken' exists
+        if (!localStorage.getItem('accessToken')) {
+            // If the cookie does not exist, navigate to the register page
+            window.location.href = '/Attendee/Login';
+        }
+    </script>
 </body>
 </html>
