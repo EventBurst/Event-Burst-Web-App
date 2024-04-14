@@ -173,6 +173,8 @@
             sessionForm.insertAdjacentHTML('beforeend', sessionHtml);
         }
 
+        
+
         // Handle form submission
        function submitForm() {
             // Gather form data
@@ -180,6 +182,7 @@
                 name: document.getElementById('eventName').value,
                 description: document.getElementById('eventDescription').value,
                 duration: document.getElementById('eventDuration').value,
+                status:"published",
                 sponsors: [],
                 sessions: []
             };
@@ -221,22 +224,26 @@
             console.log('Form data:', eventData);
 
            // Send form data to API
-           $.ajax({
-               type: 'POST',
-               url: 'http://localhost:8004/api/shiny-barnacle/event/create',
-               contentType: 'application/json',
-               data: JSON.stringify(eventData),
-               success: function(response) {
-                   // Handle successful response
-                   console.log('Event created successfully:', response);
-                   // Redirect or display success message
-               },
-               error: function(xhr, status, error) {
-                   // Handle error response
-                   console.error('Failed to create event:', error);
-                   // Display error message to the user, etc.
-               }
-           });
+          $.ajax({
+    type: 'POST',
+    url: 'http://localhost:8002/api/shiny-barnacle/event/create',
+    contentType: 'application/json',
+    data: JSON.stringify(eventData),
+    xhrFields: {
+        withCredentials: true // Include cookies with the request
+    },
+    success: function(response) {
+        // Handle successful response
+        console.log('Event created successfully:', response);
+        // Redirect or display success message
+    },
+    error: function(xhr, status, error) {
+        // Handle error response
+        console.error('Failed to create event:', error);
+        // Display error message to the user, etc.
+    }
+});
+
         }
     </script>
 }
