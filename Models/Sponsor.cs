@@ -2,7 +2,7 @@
 
 public class Sponsor
 {
-    public String _id { get; set; } // Use ObjectId type for _id
+    public String _id { get; set; } 
     public string Name { get; set; }
     public string Email { get; set; }
     public string PhoneNumber { get; set; }

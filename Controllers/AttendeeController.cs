@@ -1,26 +1,38 @@
-using System.Diagnostics;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Event_Burst_Web_App.Models;
+using Newtonsoft.Json;
 
 namespace Event_Burst_Web_App.Controllers;
 
 public class AttendeeController : Controller
 {
-    private readonly ILogger<AttendeeController> _logger;
+        private readonly HttpClient _httpClient;
 
-    public AttendeeController(ILogger<AttendeeController> logger)
-    {
-        _logger = logger;
-    }
-
+        public AttendeeController()
+        {
+           
+            _httpClient = new HttpClient();
+        }
     public IActionResult Index()
     {
         return View();
     }
-    public IActionResult ExploreEvent()
+  public async Task<IActionResult> ExploreEvent()
+{
+    var response = await _httpClient.GetAsync("http://localhost:8002/api/shiny-barnacle/event/get-all");
+
+    if (response.IsSuccessStatusCode)
     {
-        return View();
+        
+        var json = await response.Content.ReadAsStringAsync();
+        var sponsorResponse = JsonConvert.DeserializeObject<EventData>(json);
+        return View(sponsorResponse.Data);
     }
+
+    // Handle error cases
+    return Content("Failed to fetch sponsors.");
+}
     public IActionResult Register()
     {
         return View();
