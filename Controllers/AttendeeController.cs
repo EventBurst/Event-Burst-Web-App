@@ -4,11 +4,11 @@ using Event_Burst_Web_App.Models;
 
 namespace Event_Burst_Web_App.Controllers;
 
-public class EventController : Controller
+public class AttendeeController : Controller
 {
-    private readonly ILogger<EventController> _logger;
+    private readonly ILogger<AttendeeController> _logger;
 
-    public EventController(ILogger<EventController> logger)
+    public AttendeeController(ILogger<AttendeeController> logger)
     {
         _logger = logger;
     }
