@@ -1,0 +1,93 @@
+@{
+    ViewData["Title"] = "Login";
+}
+
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form id="loginForm">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" class="form-control" id="email">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password">
+                </div>
+                <div class="text-center">
+                    <p>Don't have an account? <a href="/Attendee/Register">Sign Up</a></p>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Get form data
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+
+            // Construct API URL
+            var apiUrl = 'http://localhost:8003/api/legendary-octo-events/attendee/login';
+
+            // Construct data object
+            var data = {
+                email: email,
+                password: password
+            };
+
+            // Make POST request using Fetch API
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: "include",
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Successful login
+                console.log('Login successful');
+                console.log(data)
+                localStorage.setItem('accessToken', "token");
+                showAlert('Login successful', 'alert-success');
+                window.location.href = '/Attendee';
+            })
+            .catch(error => {
+                // Failed login
+                console.error('Login failed:', error);
+                showAlert('Login failed', 'alert-danger');
+            });
+        });
+
+        // Function to display an alert
+        function showAlert(message, alertType) {
+            // Create alert element
+            var alertDiv = document.createElement('div');
+            alertDiv.className = 'alert ' + alertType;
+            alertDiv.appendChild(document.createTextNode(message));
+
+            // Insert alert before the form
+            var container = document.querySelector('.container');
+            container.insertBefore(alertDiv, container.firstChild);
+
+            // Remove alert after 3 seconds
+            setTimeout(function() {
+                container.removeChild(alertDiv);
+            }, 3000);
+        }
+    </script>
+}
