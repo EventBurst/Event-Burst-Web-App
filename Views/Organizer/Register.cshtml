@@ -35,14 +35,24 @@ ViewData["Title"] = "Register";
 @section Scripts {
     <script>
         function submitForm () {
-            console.log("AAGyaa")
             // Get form data
             var fullName = document.getElementById('fullName').value;
             var email = document.getElementById('email').value;
             var password = document.getElementById('password').value;
             var confirmPassword = document.getElementById('confirmPassword').value;
 
-    
+            // Validate form data
+            if (fullName === '' || email === '' || password === '' || confirmPassword === '') {
+                // Display error message
+                showAlert('Please fill in all fields', 'alert-danger');
+                return;
+            }
+            if (password !== confirmPassword) {
+                // Display error message
+                showAlert('Passwords do not match', 'alert-danger');
+                return;
+            }
+            
             // Construct data object
             var data = {
                 fullname: fullName,
