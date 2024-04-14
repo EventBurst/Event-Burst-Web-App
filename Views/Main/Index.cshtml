@@ -1,0 +1,32 @@
+@{
+ViewData["Title"] = "Main Page";
+}
+
+<div class="container">
+    <h1>Welcome to Event Burst Virtual Meetings</h1>
+    <p>Empowering Connections, Inspiring Collaborations</p>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <!-- Image -->
+            <img src="https://via.placeholder.com/300" class="img-fluid" alt="Choose Role Image">
+        </div>
+        <div class="col-md-6">
+            <!-- Choose Role Form -->
+            <form>
+                <h2>Choose Your Role</h2>
+                <div class="mb-3">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="role" value="attendee" checked> Attendee
+                    </label>
+                </div>
+                <div class="mb-3">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="role" value="organizer"> Organizer
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary">Continue</button>
+            </form>
+        </div>
+    </div>
+</div>
