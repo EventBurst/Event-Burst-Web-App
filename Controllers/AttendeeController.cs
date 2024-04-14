@@ -21,4 +21,12 @@ public class AttendeeController : Controller
     {
         return View();
     }
+    public IActionResult Register()
+    {
+        return View();
+    }
+    public IActionResult Login()
+    {
+        return View();
+    }
 }
