@@ -1,0 +1,105 @@
+@{
+    ViewData["Title"] = "Attendee Registeration";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form id='registerForm'>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="fullName">
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" class="form-control" id="email">
+                </div>
+                <div class="mb-3">
+                    <label for="phoneNumber" class="form-label">Phone Number</label>
+                    <input type="tel" class="form-control" id="phoneNumber">
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <input type="text" class="form-control" id="address">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password">
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-primary" onclick="submitForm()">Register</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function submitForm() {
+            console.log("AAGyaa")
+            // Get form data
+            var name = document.getElementById('name').value;
+            var email = document.getElementById('email').value;
+            var phoneNumber = document.getElementById('phoneNumber').value;
+            var address = document.getElementById('address').value;
+            var password = document.getElementById('password').value;
+
+            // Construct data object
+            var data = {
+                name: name,
+                email: email,
+                phoneNumber: phoneNumber,
+                address: address,
+                password: password
+            };
+            console.log(data)
+            // Construct API URL
+            var apiUrl = 'http://localhost:8003/api/legendary-octo-events/attendee/create';
+
+            // Make POST request using Fetch API
+            fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Successful registration
+                    console.log('Registration successful');
+                    showAlert('Registration successful', 'alert-success');
+                })
+                .catch(error => {
+                    // Failed registration
+                    console.error('Registration failed:', error);
+                    showAlert('Registration failed', 'alert-danger');
+                });
+        }
+
+        // Function to display an alert
+        function showAlert(message, alertType) {
+            // Create alert element
+            var alertDiv = document.createElement('div');
+            alertDiv.className = 'alert ' + alertType;
+            alertDiv.appendChild(document.createTextNode(message));
+
+            // Insert alert before the form
+            var container = document.querySelector('.container');
+            container.insertBefore(alertDiv, container.firstChild);
+
+            // Remove alert after 3 seconds
+            setTimeout(function() {
+                container.removeChild(alertDiv);
+            }, 3000);
+        }
+    </script>
+}
