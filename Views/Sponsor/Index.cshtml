@@ -1,0 +1,27 @@
+@model List<Sponsor>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Address</th>
+            <th>Contribution</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var sponsor in Model)
+        {
+            <tr>
+                <td>@sponsor._id</td>
+                <td>@sponsor.Name</td>
+                <td>@sponsor.Email</td>
+                <td>@sponsor.PhoneNumber</td>
+                <td>@sponsor.Address</td>
+                <td>@sponsor.Contribution</td>
+            </tr>
+        }
+    </tbody>
+</table>
