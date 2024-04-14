@@ -6,7 +6,7 @@
     <div class="text-center">
         <div id="page1">
             <h1 class="display-4">Create Event</h1>
-            <form class="row g-3">
+            <form id="eventForm" class="row g-3">
                 <div class="col-md-6 offset-md-3">
                     <label for="eventName" class="form-label">Name</label>
                     <input type="text" class="form-control" id="eventName">
@@ -40,7 +40,7 @@
             </div>
             <button type="button" class="btn btn-primary" onclick="prevPage()">Previous</button>
                         <button type="button" class="btn btn-primary" onclick="addSession()">Add Session</button>
-            <button type="submit" class="btn btn-warning">Create</button>
+            <button onclick="submitForm()" type="submit" class="btn btn-warning">Create</button>
         </div>
     </div>
 </div>
@@ -161,9 +161,7 @@
         }
 
         // Handle form submission
-        document.querySelector('form').addEventListener('submit', function(event) {
-            event.preventDefault();
-
+       function submitForm() {
             // Gather form data
             let eventData = {
                 name: document.getElementById('eventName').value,
@@ -206,7 +204,26 @@
             });
 
             // You can now submit this data to your server or handle it as needed
-            console.WriteLine(eventData);
-        });
+            // Log form data (for debugging)
+            console.log('Form data:', eventData);
+
+           // Send form data to API
+           $.ajax({
+               type: 'POST',
+               url: 'http://localhost:8004/api/shiny-barnacle/event/create',
+               contentType: 'application/json',
+               data: JSON.stringify(eventData),
+               success: function(response) {
+                   // Handle successful response
+                   console.log('Event created successfully:', response);
+                   // Redirect or display success message
+               },
+               error: function(xhr, status, error) {
+                   // Handle error response
+                   console.error('Failed to create event:', error);
+                   // Display error message to the user, etc.
+               }
+           });
+        }
     </script>
 }
