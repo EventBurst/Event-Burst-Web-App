@@ -13,7 +13,7 @@ ViewData["Title"] = "Main Page";
         </div>
         <div class="col-md-6">
             <!-- Choose Role Form -->
-            <form>
+            <form id="roleForm">
                 <h2>Choose Your Role</h2>
                 <div class="mb-3">
                     <label class="form-check-label">
@@ -30,3 +30,21 @@ ViewData["Title"] = "Main Page";
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.getElementById('roleForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Get the selected role
+            var selectedRole = document.querySelector('input[name="role"]:checked').value;
+
+            // Redirect based on the selected role
+            if (selectedRole === 'attendee') {
+                window.location.href = '/Attendee';
+            } else if (selectedRole === 'organizer') {
+                window.location.href = '/Organizer';
+            }
+        });
+    </script>
+}
