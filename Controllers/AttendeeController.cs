@@ -17,4 +17,8 @@ public class EventController : Controller
     {
         return View();
     }
+    public IActionResult ExploreEvent()
+    {
+        return View();
+    }
 }
