@@ -31,3 +31,75 @@ ViewData["Title"] = "Register";
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Get form data
+            var fullName = document.getElementById('fullName').value;
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+            var confirmPassword = document.getElementById('confirmPassword').value;
+
+            // Validate password match
+            if (password !== confirmPassword) {
+                showAlert('Passwords do not match', 'alert-danger');
+                return;
+            }
+
+            // Construct data object
+            var data = {
+                fullname: fullName,
+                email: email,
+                password: password
+            };
+
+            // Construct API URL
+            var apiUrl = 'http://localhost:8004/api/shiny-barnacle/organizer/create';
+
+            // Make POST request using Fetch API
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Successful registration
+                console.log('Registration successful');
+                showAlert('Registration successful', 'alert-success');
+            })
+            .catch(error => {
+                // Failed registration
+                console.error('Registration failed:', error);
+                showAlert('Registration failed', 'alert-danger');
+            });
+        });
+
+        // Function to display an alert
+        function showAlert(message, alertType) {
+            // Create alert element
+            var alertDiv = document.createElement('div');
+            alertDiv.className = 'alert ' + alertType;
+            alertDiv.appendChild(document.createTextNode(message));
+
+            // Insert alert before the form
+            var container = document.querySelector('.container');
+            container.insertBefore(alertDiv, container.firstChild);
+
+            // Remove alert after 3 seconds
+            setTimeout(function() {
+                container.removeChild(alertDiv);
+            }, 3000);
+        }
+    </script>
+}

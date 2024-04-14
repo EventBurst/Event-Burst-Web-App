@@ -1,5 +1,5 @@
 @{
-ViewData["Title"] = "Login";
+    ViewData["Title"] = "Login";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -7,7 +7,7 @@ ViewData["Title"] = "Login";
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <form>
+            <form id="loginForm">
                 <div class="mb-3">
                     <label for="email" class="form-label">Email Address</label>
                     <input type="email" class="form-control" id="email">
@@ -23,3 +23,58 @@ ViewData["Title"] = "Login";
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Get form data
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+
+            // Construct API URL
+            var apiUrl = 'http://localhost:8004/api/shiny-barnacle/organizer/create';
+
+            // Create AJAX request
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', apiUrl, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+
+            // Handle response
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // Successful login
+                    console.log('Login successful');
+                    // Display success alert
+                    showAlert('Login successful', 'alert-success');
+                } else {
+                    // Failed login
+                    console.error('Login failed');
+                    // Display failure alert
+                    showAlert('Login failed', 'alert-danger');
+                }
+            };
+
+            // Send request with JSON payload
+            xhr.send(JSON.stringify({ email: email, password: password }));
+        });
+
+        // Function to display an alert
+        function showAlert(message, alertType) {
+            // Create alert element
+            var alertDiv = document.createElement('div');
+            alertDiv.className = 'alert ' + alertType;
+            alertDiv.appendChild(document.createTextNode(message));
+
+            // Insert alert before the form
+            var container = document.querySelector('.container');
+            container.insertBefore(alertDiv, container.firstChild);
+
+            // Remove alert after 3 seconds
+            setTimeout(function() {
+                container.removeChild(alertDiv);
+            }, 3000);
+        }
+    </script>
+}
