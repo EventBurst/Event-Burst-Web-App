@@ -23,7 +23,6 @@
         </div>
     </div>
 </div>
-
 @section Scripts {
     <script>
         document.getElementById('loginForm').addEventListener('submit', function(event) {
@@ -34,30 +33,39 @@
             var password = document.getElementById('password').value;
 
             // Construct API URL
-            var apiUrl = 'http://localhost:8004/api/shiny-barnacle/organizer/create';
+            var apiUrl = 'http://localhost:8004/api/shiny-barnacle/organizer/login';
 
-            // Create AJAX request
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', apiUrl, true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
-
-            // Handle response
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    // Successful login
-                    console.log('Login successful');
-                    // Display success alert
-                    showAlert('Login successful', 'alert-success');
-                } else {
-                    // Failed login
-                    console.error('Login failed');
-                    // Display failure alert
-                    showAlert('Login failed', 'alert-danger');
-                }
+            // Construct data object
+            var data = {
+                email: email,
+                password: password
             };
 
-            // Send request with JSON payload
-            xhr.send(JSON.stringify({ email: email, password: password }));
+            // Make POST request using Fetch API
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Successful login
+                console.log('Login successful');
+                console.log(data)
+                showAlert('Login successful', 'alert-success');
+            })
+            .catch(error => {
+                // Failed login
+                console.error('Login failed:', error);
+                showAlert('Login failed', 'alert-danger');
+            });
         });
 
         // Function to display an alert
