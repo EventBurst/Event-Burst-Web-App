@@ -33,7 +33,7 @@
             var password = document.getElementById('password').value;
 
             // Construct API URL
-            var apiUrl = 'http://localhost:8004/api/shiny-barnacle/organizer/login';
+            var apiUrl = 'http://localhost:8002/api/shiny-barnacle/organizer/login';
 
             // Construct data object
             var data = {
@@ -47,6 +47,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
+                credentials: "include",
                 body: JSON.stringify(data)
             })
             .then(response => {
