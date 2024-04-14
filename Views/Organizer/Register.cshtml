@@ -7,7 +7,7 @@ ViewData["Title"] = "Register";
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <form  id='registerForm'>
+            <form id="registerForm" onsubmit="submitForm(event)">
                 <div class="mb-3">
                     <label for="fullName" class="form-label">Full Name</label>
                     <input type="text" class="form-control" id="fullName">
@@ -25,7 +25,7 @@ ViewData["Title"] = "Register";
                     <input type="password" class="form-control" id="confirmPassword">
                 </div>
                 <div class="text-center">
-                    <button  class="btn btn-primary" onclick="submitForm()">Register</button>
+                    <button  class="btn btn-primary" type="submit">Register</button>
                 </div>
             </form>
         </div>
@@ -34,7 +34,9 @@ ViewData["Title"] = "Register";
 
 @section Scripts {
     <script>
-        function submitForm () {
+        function submitForm(event) {
+            event.preventDefault(); // Prevent form submission
+
             // Get form data
             var fullName = document.getElementById('fullName').value;
             var email = document.getElementById('email').value;
@@ -59,9 +61,9 @@ ViewData["Title"] = "Register";
                 email: email,
                 password: password
             };
-            console.log(data)
+
             // Construct API URL
-            var apiUrl = 'http://localhost:8002/api/shiny-barnacle/organizer/create';
+            var apiUrl = 'http://localhost:8004/api/shiny-barnacle/organizer/create';
 
             // Make POST request using Fetch API
             fetch(apiUrl, {
