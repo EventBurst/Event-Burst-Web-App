@@ -36,18 +36,14 @@ namespace Event_Burst_Web_App.Controllers
                 var responseData = await response.Content.ReadAsStringAsync();
                 var apiResponse = JsonConvert.DeserializeObject<ApiResponse<List<Sponsor>>>(responseData);
 
-                Console.WriteLine(apiResponse.Data[0].Name);
-
                 if (apiResponse.Message == "Success")
                 {
                     var sponsors = apiResponse.Data;
                     return View(sponsors);
                 }
-                else
-                {
-                    _logger.LogError("Failed to fetch sponsors: {message}", apiResponse.Message);
-                    return StatusCode(500); // Return server error status code
-                }
+
+                _logger.LogError("Failed to fetch sponsors: {message}", apiResponse.Message);
+                return StatusCode(500); // Return server error status code
             }
             catch (HttpRequestException ex)
             {
@@ -71,9 +67,37 @@ namespace Event_Burst_Web_App.Controllers
                 response.EnsureSuccessStatusCode(); // Throw on error response
 
                 var responseData = await response.Content.ReadAsStringAsync();
-                var sponsor = JsonConvert.DeserializeObject<Sponsor>(responseData);
+                var sponsor = JsonConvert.DeserializeObject<ApiResponse<List<Sponsor>>>(responseData);
 
-                return View(sponsor); // Return the view with the sponsor details for editing
+                if (sponsor.Message == "Success")
+                {
+                    var sponsors = sponsor.Data[0];
+                    return View(sponsors); 
+                }
+                
+                _logger.LogError("Failed to fetch sponsors: {message}", sponsor.Message);
+                return StatusCode(500); // Return server error status code
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError(ex, "Error calling API");
+                return StatusCode(500); // Return server error status code
+            }
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> UpdateSponsor(Sponsor sponsor)
+        {
+            try
+            {
+                var json = JsonConvert.SerializeObject(sponsor);
+                var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.PutAsync($"/api/shiny-barnacle/sponsor/update/{sponsor.Id}", content);
+
+                response.EnsureSuccessStatusCode(); // Throw on error response
+
+                return RedirectToAction("Index"); // Redirect to index or another page on success
             }
             catch (HttpRequestException ex)
             {
