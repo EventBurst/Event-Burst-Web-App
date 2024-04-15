@@ -89,4 +89,55 @@ public class SpeakerController : Controller
             return StatusCode(500); // Return server error status code
         }
     }
+
+    [HttpGet]
+    public async Task<IActionResult> Update(string id)
+    {
+        try
+        {
+            // Fetch the sponsor details by ID
+            var response = await _httpClient.GetAsync($"/api/shiny-barnacle/speaker/get/{id}");
+            response.EnsureSuccessStatusCode(); // Throw on error response
+
+            var responseData = await response.Content.ReadAsStringAsync();
+            var speaker = JsonConvert.DeserializeObject<ApiResponse<Speaker>>(responseData);
+            
+            if (speaker.Message == "Success")
+            {
+                // Pass the speaker details to the view
+                var speakerdetial = speaker.Data;
+                return View(speakerdetial); 
+            }
+                
+            _logger.LogError("Failed to fetch sponsors: {message}", speaker.Message);
+            return StatusCode(500); // Return server error status code
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.LogError(ex, "Error calling API");
+            return StatusCode(500); // Return server error status code
+        }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UpdateSpeaker(Speaker speaker)
+    {
+        try
+        {
+            var json = JsonConvert.SerializeObject(speaker);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            
+            var response = await _httpClient.PutAsync($"/api/shiny-barnacle/speaker/update/{speaker.SpeakerId}", content);
+            
+            response.EnsureSuccessStatusCode(); // Throw on error response
+            
+            return RedirectToAction("Index"); // Redirect to index or another page on success
+        }
+        catch (HttpRequestException ex)
+        {
+            
+            _logger.LogError(ex, "Error calling API");
+            return StatusCode(500); // Return server error status code
+        }
+    }
 }

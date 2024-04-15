@@ -1,0 +1,30 @@
+@using Event_Burst_Web_App.Models;
+@model Speaker
+
+@{
+    ViewData["Title"] = "Update Speaker";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@using (Html.BeginForm("UpdateSpeaker", "Speaker", FormMethod.Post))
+{
+    @Html.HiddenFor(model => model.SpeakerId)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name)
+        @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @placeholder = "Enter speaker name" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Email)
+        @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @placeholder = "Enter email" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.PhoneNumber)
+        @Html.TextBoxFor(model => model.PhoneNumber, new { @class = "form-control", @placeholder = "Enter phone number" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+}
