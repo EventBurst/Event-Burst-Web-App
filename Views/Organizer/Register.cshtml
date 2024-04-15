@@ -46,12 +46,12 @@ ViewData["Title"] = "Register";
             // Validate form data
             if (fullName === '' || email === '' || password === '' || confirmPassword === '') {
                 // Display error message
-                showAlert('Please fill in all fields', 'alert-danger');
+                alert('Please fill in all fields');
                 return;
             }
             if (password !== confirmPassword) {
                 // Display error message
-                showAlert('Passwords do not match', 'alert-danger');
+                alert('Passwords do not match');
                 return;
             }
             
@@ -63,7 +63,7 @@ ViewData["Title"] = "Register";
             };
 
             // Construct API URL
-            var apiUrl = 'http://localhost:8004/api/shiny-barnacle/organizer/create';
+            var apiUrl = 'http://localhost:8002/api/shiny-barnacle/organizer/create';
 
             // Make POST request using Fetch API
             fetch(apiUrl, {
@@ -82,30 +82,15 @@ ViewData["Title"] = "Register";
             .then(data => {
                 // Successful registration
                 console.log('Registration successful');
-                showAlert('Registration successful', 'alert-success');
+                alert('Registration successful');
+                window.location.href = '/Organizer/Login';
             })
             .catch(error => {
                 // Failed registration
                 console.error('Registration failed:', error);
-                showAlert('Registration failed', 'alert-danger');
+                alert('Registration failed');
             });
         }
 
-        // Function to display an alert
-        function showAlert(message, alertType) {
-            // Create alert element
-            var alertDiv = document.createElement('div');
-            alertDiv.className = 'alert ' + alertType;
-            alertDiv.appendChild(document.createTextNode(message));
-
-            // Insert alert before the form
-            var container = document.querySelector('.container');
-            container.insertBefore(alertDiv, container.firstChild);
-
-            // Remove alert after 3 seconds
-            setTimeout(function() {
-                container.removeChild(alertDiv);
-            }, 3000);
-        }
     </script>
 }
