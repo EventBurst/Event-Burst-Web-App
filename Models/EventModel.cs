@@ -1,3 +1,5 @@
+using Event_Burst_Web_App.Models;
+
 public class Event
     {
         public string _id  { get; set; }

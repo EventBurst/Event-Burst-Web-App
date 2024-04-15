@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Event_Burst_Web_App.Models;

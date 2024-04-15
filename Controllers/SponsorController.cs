@@ -21,7 +21,7 @@ namespace Event_Burst_Web_App.Controllers
         {
             _logger = logger;
             _httpClient = httpClientFactory.CreateClient();
-            _httpClient.BaseAddress = new Uri("http://localhost:8004/"); // Replace with your API base URL
+            _httpClient.BaseAddress = new Uri("http://localhost:8004"); 
             _httpClient.DefaultRequestHeaders.Accept.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
@@ -32,9 +32,11 @@ namespace Event_Burst_Web_App.Controllers
             {
                 var response = await _httpClient.GetAsync("/api/shiny-barnacle/sponsor/get-all");
                 response.EnsureSuccessStatusCode(); // Throw on error response
-
+                
                 var responseData = await response.Content.ReadAsStringAsync();
                 var apiResponse = JsonConvert.DeserializeObject<ApiResponse<List<Sponsor>>>(responseData);
+
+                Console.WriteLine(apiResponse.Data[0].Name);
 
                 if (apiResponse.Message == "Success")
                 {
