@@ -1,11 +1,26 @@
+using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+using MongoDB.Bson.Serialization.Attributes;
 
+namespace Event_Burst_Web_App.Models;
 
 public class Sponsor
 {
-    public String _id { get; set; } 
-    public string Name { get; set; }
+    [Key] public int Id { get; set; }
+    
+    [BsonId]
+    [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
+    public string? SponsorId { get; set; }
+
+    [Required] public string Name { get; set; }
+
+    [Required]
+    [EmailAddress]
     public string Email { get; set; }
-    public string PhoneNumber { get; set; }
-    public string Address { get; set; }
-    public int Contribution { get; set; }
+
+    [Required] [Phone] public string PhoneNumber { get; set; }
+
+    [Required] public string Address { get; set; }
+
+    [Required] public decimal Contribution { get; set; }
 }

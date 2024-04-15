@@ -1,0 +1,41 @@
+@using Event_Burst_Web_App.Models; // Make sure to import the namespace of your Sponsor model
+
+@model Sponsor
+
+@{
+ViewData["Title"] = "Update Sponsor";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@using (Html.BeginForm("UpdateSponsor", "Sponsor", FormMethod.Post))
+{
+@Html.HiddenFor(model => model.SponsorId)
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Name)
+    @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Email)
+    @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.PhoneNumber)
+    @Html.TextBoxFor(model => model.PhoneNumber, new { @class = "form-control" })
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Address)
+    @Html.TextBoxFor(model => model.Address, new { @class = "form-control" })
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Contribution)
+    @Html.TextBoxFor(model => model.Contribution, new { @class = "form-control" })
+</div>
+
+<button type="submit" class="btn btn-primary">Submit</button>
+}
