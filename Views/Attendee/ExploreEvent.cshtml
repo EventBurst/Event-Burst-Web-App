@@ -10,11 +10,10 @@
         <div class="col-sm-4 mb-3 mb-sm-0">
             <div class="card my-4">
                 <div class="card-body">
-                    <h5 class="card-title">@item.Name</h5>
+                    <h5 class="text-center my-2">@item.Name</h5>
                     <p class="card-text"><strong>Description:</strong> @item.Description</p>
                     <p class="card-text"><strong>Duration:</strong> @item.Duration</p>
-                    <p class="card-text"><strong>Created At:</strong> @item.CreatedAt</p>
-                    <button class="btn btn-primary" type="button">
+                    <button class="btn btn-primary get-ticket" data-event-id="@item._id" type="button">
                         Get Ticket
                     </button>
                 </div>
@@ -22,3 +21,33 @@
         </div>
     }
 </div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.get-ticket').click(function () {
+                var eventId = $(this).data('event-id');
+                console.log(eventId)
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://localhost:8003/api/legendary-octo-events/attendee/buy-ticket/' + eventId,
+                   
+                    contentType: 'application/json',
+                
+                     xhrFields: {
+                      withCredentials: true // Include cookies with the request
+                    },
+                    success: function (response) {
+                        alert('Ticket purchased successfully!');
+                        console.log(response);
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle errors here
+                        alert('Error occurred while purchasing ticket: ' + error);
+                    }
+                });
+            });
+        });
+    </script>
+}
