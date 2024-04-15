@@ -1,0 +1,20 @@
+@{
+    ViewData["Title"] = "Booked Events";
+}
+@model List<Event>
+
+<h1>Your Booked Events</h1>
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-sm-4 mb-3 mb-sm-0">
+            <div class="card my-4">
+                <div class="card-body">
+                    <h5 class="text-center my-2">@item.Name</h5>
+                    <p class="card-text"><strong>Description:</strong> @item.Description</p>
+                    <p class="card-text"><strong>Duration:</strong> @item.Duration</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -33,6 +33,23 @@ public class AttendeeController : Controller
     // Handle error cases
     return Content("Failed to fetch sponsors.");
 }
+public async Task<IActionResult> BookedEvents()
+{
+//    var response = await _httpClient.GetAsync("http://localhost:8003/api/legendary-octo-events/attendee/get-attendee-tickets");
+    var response = await _httpClient.GetAsync("http://localhost:8002/api/shiny-barnacle/event/get-all");
+    Console.WriteLine(response);
+    if (response.IsSuccessStatusCode)
+    {
+        
+        var json = await response.Content.ReadAsStringAsync();
+        var sponsorResponse = JsonConvert.DeserializeObject<EventData>(json);
+        return View(sponsorResponse.Data);
+    }
+
+    // Handle error cases
+    return Content("Failed to fetch sponsors.");
+}
+
     public IActionResult Register()
     {
         return View();
