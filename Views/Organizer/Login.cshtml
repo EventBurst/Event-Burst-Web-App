@@ -1,5 +1,5 @@
 @{
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "Organizer Login";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -17,6 +17,7 @@
                     <input type="password" class="form-control" id="password">
                 </div>
                 <div class="text-center">
+                    <p>Don't have an account? <a href="/Organizer/Register">Sign Up</a></p>
                     <button type="submit" class="btn btn-primary">Login</button>
                 </div>
             </form>
@@ -60,7 +61,9 @@
                 // Successful login
                 console.log('Login successful');
                 console.log(data)
-                showAlert('Login successful', 'alert-success');
+                localStorage.setItem('OrganizerAccessToken', "token");
+                window.location.href = '/Organizer';
+                alert('Login successful');
             })
             .catch(error => {
                 // Failed login
