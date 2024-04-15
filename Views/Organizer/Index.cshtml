@@ -20,3 +20,10 @@ ViewData["Title"] = "Organizer Page";
         </div>
     </div>
 </div>
+<script>
+        // Check if the cookie 'accessToken' exists
+        if (!localStorage.getItem('OrganizerAccessToken')) {
+            // If the cookie does not exist, navigate to the register page
+            window.location.href = '/Organizer/Login';
+        }
+</script>
