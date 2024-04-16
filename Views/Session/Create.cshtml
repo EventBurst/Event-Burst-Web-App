@@ -11,26 +11,37 @@
         <div class="col-md-6 offset-md-3">
             @using (Html.BeginForm("Create", "Session", FormMethod.Post, new { @class = "mt-4" }))
             {
-                <div class="form-group gap-2">
-                    @Html.LabelFor(model => model.Name)
-                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-                </div>
-                
-                <div class="form-group gap-2">
-                    @Html.LabelFor(model => model.Description)
-                    @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-                </div>
-                
-                <div class="form-group gap-2">
-                    @Html.LabelFor(model => model.Speakers[0].Name)
-                    @Html.TextBoxFor(model => model.Speakers[0].Name, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Speakers[0].Name, "", new { @class = "text-danger" })
-                </div>
+                <!-- Session Details -->
+                <div id="sessionPage">
+                    <div class="form-group gap-2">
+                        @Html.LabelFor(model => model.Name)
+                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group gap-2">
+                        @Html.LabelFor(model => model.Description)
+                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group gap-2">
+                        @Html.LabelFor(model => model.speakerId)
+                        @Html.DropDownListFor(model => model.speakerId, new SelectList(Model.Speakers, "SpeakerId", "Name"),
+                                 "", new { @class = "form-control" })
+                    </div>
+
+                    <div class="form-group gap-2">
+                        @Html.LabelFor(model => model.agendaId)
+                        @Html.DropDownListFor(model => model.agendaId, new SelectList(Model.Agendas, "AgendaId", "Name"), "", new
+                            {
+                                @class = "form-control"
+                            })
+                    </div>
 
                     <button type="submit" class="btn btn-primary m-2">Create Session</button>
-                    }
                 </div>
+            }
+        </div>
     </div>
 </div>

@@ -60,9 +60,11 @@ namespace Event_Burst_Web_App.Controllers
                 // Call the getspeakersasync function
                 var session = new Session();
                 var speakers = await GetSpeakersAsync();
+                var agendas= await GetAgendasAsync();
                 
                 // Pass the session details to the view
                 session.Speakers = speakers;
+                session.Agendas = agendas;
                 return View(session);
             }
             else
@@ -76,11 +78,9 @@ namespace Event_Burst_Web_App.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
-                {
+               
                     var json = JsonConvert.SerializeObject(session);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
-
                     var response = await _httpClient.PostAsync("/api/shiny-barnacle/session/create", content);
 
                     if (response.IsSuccessStatusCode)
@@ -92,12 +92,8 @@ namespace Event_Burst_Web_App.Controllers
                     // Handle API error responses
                     _logger.LogError("Error creating session: {statusCode}", response.StatusCode);
                     return StatusCode((int)response.StatusCode);
-                }
-                else
-                {
-                    // Invalid model state, return to the create view with validation errors
-                    return View(session);
-                }
+                
+               
             }
             catch (HttpRequestException ex)
             {
@@ -134,7 +130,33 @@ namespace Event_Burst_Web_App.Controllers
                 return new List<Speaker>();
             }
         }
+        [HttpGet]
+        public async Task<List<Agenda>> GetAgendasAsync()
+        {
+            // Get the speakers list
+            try
+            {
+                var response = await _httpClient.GetAsync("/api/shiny-barnacle/agenda/get-all");
+                response.EnsureSuccessStatusCode();
 
+                var responseData = await response.Content.ReadAsStringAsync();
+                var apiResponse = JsonConvert.DeserializeObject<ApiResponse<List<Agenda>>>(responseData);
+
+                if (apiResponse.Message == "Success")
+                {
+                    var agendas = apiResponse.Data;
+                    return agendas;
+                }
+
+                _logger.LogError("Failed to fetch agendas: {message}", apiResponse.Message);
+                return new List<Agenda>();
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine(e);
+                return new List<Agenda>();
+            }
+        }
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {

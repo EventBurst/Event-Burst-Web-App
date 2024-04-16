@@ -11,6 +11,8 @@ namespace Event_Burst_Web_App.Models
         public int SessionId { get; set; } // Adding Session ID
 
         public List<Speaker> Speakers { get; set; }
+        public String speakerId { get; set; }
+        public String agendaId { get; set; }
 
         [Required]
         public string Name { get; set; }
@@ -18,6 +20,6 @@ namespace Event_Burst_Web_App.Models
         [Required]
         public string Description { get; set; }
 
-        public string AgendaId { get; set; }
+        public List<Agenda> Agendas { get; set; }
     }
 }
