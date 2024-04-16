@@ -1,0 +1,23 @@
+@model Event_Burst_Web_App.Models.Session
+
+@{
+    ViewData["Title"] = "Update Session";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@using (Html.BeginForm("UpdateSession", "Session", FormMethod.Post))
+{
+    @Html.HiddenFor(model => model.SessionId)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name)
+        @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @placeholder = "Enter session name" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Description)
+        @Html.TextBoxFor(model => model.Description, new { @class = "form-control", @placeholder = "Enter session description" })
+    </div>
+    <button type="submit" class="btn btn-primary">Update Session</button>
+}
