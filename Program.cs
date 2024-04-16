@@ -25,6 +25,8 @@ public class Program
 
         app.UseHttpsRedirection();
         app.UseStaticFiles();
+        app.UseExceptionHandler("/Error");
+        app.UseStatusCodePagesWithReExecute("/NotFound", "?statusCode={0}");
 
         app.UseRouting();
 

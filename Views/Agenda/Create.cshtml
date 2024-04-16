@@ -1,0 +1,93 @@
+@model Event_Burst_Web_App.Models.Agenda
+
+@{
+    ViewBag.Title = "Agenda";
+}
+
+<h1>@ViewBag.Title</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            @using (Html.BeginForm("Create", "Agenda", FormMethod.Post, new { @class = "mt-4" }))
+            {
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name)
+                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description)
+                    @Html.TextBoxFor(model => model.Description, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.StartTime)
+                    <div class="input-group date" id="startTimePicker" data-target-input="nearest">
+                        @Html.TextBoxFor(model => model.StartTime, "{0:yyyy-MM-ddTHH:mm:ss}", new { @class = "form-control datetimepicker-input", data_toggle = "datetimepicker", data_target = "#startTimePicker" })
+                        <div class="input-group-append" data-target="#startTimePicker" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="bi bi-calendar-date"></i></div>
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.StartTime, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.EndTime)
+                    <div class="input-group date" id="endTimePicker" data-target-input="nearest">
+                        @Html.TextBoxFor(model => model.EndTime, "{0:yyyy-MM-ddTHH:mm:ss}", new { @class = "form-control datetimepicker-input", data_toggle = "datetimepicker", data_target = "#endTimePicker" })
+                        <div class="input-group-append" data-target="#endTimePicker" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="bi bi-calendar-date"></i></div>
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.EndTime, "", new { @class = "text-danger" })
+                </div>
+
+                <button type="submit" class="btn btn-primary">Create Agenda</button>
+            }
+        </div>
+    </div>
+</div>
+
+@section scripts {
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css" />
+
+<script>
+        $(function () {
+            $('#startTimePicker').datetimepicker({
+                format: 'YYYY-MM-DDTHH:mm:ss',
+                icons: {
+                    time: 'fa fa-clock',
+                    date: 'fa fa-calendar',
+                    up: 'fa fa-arrow-up',
+                    down: 'fa fa-arrow-down',
+                    previous: 'fa fa-chevron-left',
+                    next: 'fa fa-chevron-right',
+                    today: 'fa fa-calendar-check-o',
+                    clear: 'fa fa-trash',
+                    close: 'fa fa-times'
+                }
+            });
+            $('#endTimePicker').datetimepicker({
+                format: 'YYYY-MM-DDTHH:mm:ss',
+                icons: {
+                    time: 'fa fa-clock',
+                    date: 'fa fa-calendar',
+                    up: 'fa fa-arrow-up',
+                    down: 'fa fa-arrow-down',
+                    previous: 'fa fa-chevron-left',
+                    next: 'fa fa-chevron-right',
+                    today: 'fa fa-calendar-check-o',
+                    clear: 'fa fa-trash',
+                    close: 'fa fa-times'
+                }
+            });
+        });
+    </script>
+}

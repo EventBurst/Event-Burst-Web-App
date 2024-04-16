@@ -6,12 +6,12 @@ using Newtonsoft.Json;
 
 namespace Event_Burst_Web_App.Controllers;
 
-public class SpeakerController : Controller
+public class AgendaController: Controller
 {
     private readonly HttpClient _httpClient;
-    private readonly ILogger<SpeakerController> _logger;
+    private readonly ILogger<AgendaController> _logger;
 
-    public SpeakerController(ILogger<SpeakerController> logger, IHttpClientFactory httpClientFactory)
+    public AgendaController(ILogger<AgendaController> logger, IHttpClientFactory httpClientFactory)
     {
         _logger = logger;
         _httpClient = httpClientFactory.CreateClient();
@@ -24,12 +24,18 @@ public class SpeakerController : Controller
     {
         try
         {
-            var response = await _httpClient.GetAsync("/api/shiny-barnacle/speaker/get-all");
+            var response = await _httpClient.GetAsync("/api/shiny-barnacle/agenda/get-all");
             response.EnsureSuccessStatusCode();
 
             var responseData = await response.Content.ReadAsStringAsync();
-            var apiResponse = JsonConvert.DeserializeObject<ApiResponse<List<Speaker>>>(responseData);
-
+            Console.WriteLine(responseData);
+            var jsonSettings = new JsonSerializerSettings
+            {
+                DateFormatHandling = DateFormatHandling.IsoDateFormat,
+                DateTimeZoneHandling = DateTimeZoneHandling.Utc
+            };
+            var apiResponse = JsonConvert.DeserializeObject<ApiResponse<List<Agenda>>>(responseData, jsonSettings);
+            
             if (apiResponse.Message == "Success")
             {
                 var speakers = apiResponse.Data;
@@ -46,31 +52,50 @@ public class SpeakerController : Controller
         }
     }
 
+
     public IActionResult Create()
     {
         return View();
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(Speaker speaker)
+    public async Task<IActionResult> Create(Agenda agenda)
     {
         try
         {
-            var json = JsonConvert.SerializeObject(speaker);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            if (ModelState.IsValid)
+            {
+                var json = JsonConvert.SerializeObject(agenda);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("/api/shiny-barnacle/speaker/create", content);
-
-            response.EnsureSuccessStatusCode(); // Throw on error response
-
-            return RedirectToAction("Index"); // Redirect to index or another page on success
+                var response = await _httpClient.PostAsync("/api/shiny-barnacle/agenda/create", content);
+            
+                if (response.IsSuccessStatusCode)
+                {
+                    // Agenda created successfully, redirect to index
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    // Handle API error responses
+                    _logger.LogError("Error creating agenda: {statusCode}", response.StatusCode);
+                    return StatusCode((int)response.StatusCode);
+                }
+            }
+            else
+            {
+                // Invalid model state, return to the create view with validation errors
+                return View(agenda);
+            }
         }
         catch (HttpRequestException ex)
         {
+            // Handle HTTP request exceptions
             _logger.LogError(ex, "Error calling API");
             return StatusCode(500); // Return server error status code
         }
     }
+
     
     [HttpPost]
     public async Task<IActionResult> Delete(string id)
@@ -78,7 +103,7 @@ public class SpeakerController : Controller
         try
         {
             Console.WriteLine(id);
-            var response = await _httpClient.DeleteAsync($"/api/shiny-barnacle/speaker/delete/{id}");
+            var response = await _httpClient.DeleteAsync($"/api/shiny-barnacle/agenda/delete/{id}");
             response.EnsureSuccessStatusCode(); // Throw on error response
 
             return RedirectToAction("Index"); // Redirect to index after successful deletion
@@ -96,11 +121,11 @@ public class SpeakerController : Controller
         try
         {
             // Fetch the sponsor details by ID
-            var response = await _httpClient.GetAsync($"/api/shiny-barnacle/speaker/get/{id}");
+            var response = await _httpClient.GetAsync($"/api/shiny-barnacle/agenda/get/{id}");
             response.EnsureSuccessStatusCode(); // Throw on error response
 
             var responseData = await response.Content.ReadAsStringAsync();
-            var speaker = JsonConvert.DeserializeObject<ApiResponse<Speaker>>(responseData);
+            var speaker = JsonConvert.DeserializeObject<ApiResponse<Agenda>>(responseData);
             
             if (speaker.Message == "Success")
             {
@@ -120,14 +145,14 @@ public class SpeakerController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> UpdateSpeaker(Speaker speaker)
+    public async Task<IActionResult> UpdateAgenda(Agenda speaker)
     {
         try
         {
             var json = JsonConvert.SerializeObject(speaker);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             
-            var response = await _httpClient.PutAsync($"/api/shiny-barnacle/speaker/update/{speaker.SpeakerId}", content);
+            var response = await _httpClient.PutAsync($"/api/shiny-barnacle/agenda/update/{speaker.AgendaId}", content);
             
             response.EnsureSuccessStatusCode(); // Throw on error response
             
