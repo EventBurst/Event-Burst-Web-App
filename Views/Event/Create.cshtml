@@ -1,0 +1,53 @@
+@model Event
+@{
+    ViewBag.Title = "Create Event";
+}
+
+<h1>@ViewBag.Title</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            @using (Html.BeginForm("Create", "Event", FormMethod.Post, new { @class = "mt-4" }))
+            {
+                <!-- Event Details -->
+                <div id="eventPage">
+                    <div class="form-group gap-2">
+                        @Html.LabelFor(model => model.Name)
+                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group gap-2">
+                        @Html.LabelFor(model => model.Description)
+                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group gap-2">
+                        @Html.LabelFor(model => model.Sponsors)
+                        @Html.ListBoxFor(model => model.SponsorIds, new SelectList(Model.Sponsors, "SponsorId", "Name"), new { @class = "form-control", multiple = "multiple" })
+                    </div>
+
+                    <div class="form-group gap-2">
+                        @Html.LabelFor(model => model.Sessions)
+                        @Html.ListBoxFor(model => model.SessionIds, new SelectList(Model.Sessions, "SessionId", "Name"), new { @class = "form-control", multiple = "multiple" })
+                    </div>
+
+                    <button type="submit" class="btn btn-primary m-2">Create Event</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            // Deselect option on double-click
+            $('select[multiple]').dblclick(function () {
+                $(this).find('option:selected').prop('selected', false);
+            });
+        });
+    </script>
+}

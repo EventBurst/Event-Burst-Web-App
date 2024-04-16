@@ -49,6 +49,7 @@ namespace Event_Burst_Web_App.Controllers
                 {
                     _httpClient.DefaultRequestHeaders.Add("Cookie", $"{cookie.Key}={cookie.Value}");
                 }
+
                 var response = await _httpClient.GetAsync("/api/shiny-barnacle/event/get-organizer-events");
                 response.EnsureSuccessStatusCode();
 
@@ -71,11 +72,84 @@ namespace Event_Burst_Web_App.Controllers
             }
         }
 
-        public IActionResult Create()
+        [HttpGet]
+
+        public async Task<IActionResult> Create()
         {
-            return View();
+            // Pass the event details to the view
+            if (ModelState.IsValid)
+            {
+                var @event = new Event();
+                var sponsors = await GetSponsorsAsync();
+                var sessions = await GetSessionsAsync();
+
+                @event.Sponsors = sponsors;
+                @event.Sessions = sessions;
+
+                return View(@event);
+            }
+            else
+            {
+                return View();
+            }
         }
 
+
+        [HttpGet]
+        public async Task<List<Sponsor>> GetSponsorsAsync()
+        {
+            // Get the speakers list
+            try
+            {
+                var response = await _httpClient.GetAsync("/api/shiny-barnacle/sponsor/get-all");
+                response.EnsureSuccessStatusCode();
+
+                var responseData = await response.Content.ReadAsStringAsync();
+                var apiResponse = JsonConvert.DeserializeObject<ApiResponse<List<Sponsor>>>(responseData);
+
+                if (apiResponse.Message == "Success")
+                {
+                    var sponsors = apiResponse.Data;
+                    return sponsors;
+                }
+
+                _logger.LogError("Failed to fetch sponsors: {message}", apiResponse.Message);
+                return new List<Sponsor>();
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine(e);
+                return new List<Sponsor>();
+            }
+        }
+
+        [HttpGet]
+        public async Task<List<Session>> GetSessionsAsync()
+        {
+            // Get the speakers list
+            try
+            {
+                var response = await _httpClient.GetAsync("/api/shiny-barnacle/session/get-all");
+                response.EnsureSuccessStatusCode();
+
+                var responseData = await response.Content.ReadAsStringAsync();
+                var apiResponse = JsonConvert.DeserializeObject<ApiResponse<List<Session>>>(responseData);
+
+                if (apiResponse.Message == "Success")
+                {
+                    var sessions = apiResponse.Data;
+                    return sessions;
+                }
+
+                _logger.LogError("Failed to fetch sessions: {message}", apiResponse.Message);
+                return new List<Session>();
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine(e);
+                return new List<Session>();
+            }
+        }
         [HttpPost]
         public async Task<IActionResult> Create(Event eventData)
         {
