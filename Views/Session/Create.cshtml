@@ -1,0 +1,31 @@
+@model Event_Burst_Web_App.Models.Session
+
+@{
+    ViewBag.Title = "Create Session";
+}
+
+<h1>@ViewBag.Title</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            @using (Html.BeginForm("Create", "Session", FormMethod.Post, new { @class = "mt-4" }))
+            {
+                <div class="form-group gap-2">
+                    @Html.LabelFor(model => model.Name)
+                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div>
+                
+                <div class="form-group gap-2">
+                    @Html.LabelFor(model => model.Description)
+                    @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
+                
+                
+                    <button type="submit" class="btn btn-primary m-2">Create Session</button>
+                    }
+                </div>
+    </div>
+</div>
