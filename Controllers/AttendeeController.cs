@@ -20,7 +20,7 @@ public class AttendeeController : Controller
     }
   public async Task<IActionResult> ExploreEvent()
 {
-    var response = await _httpClient.GetAsync("http://localhost:8002/api/shiny-barnacle/event/get-all");
+    var response = await _httpClient.GetAsync("http://localhost:8004/api/shiny-barnacle/event/get-all");
 
     if (response.IsSuccessStatusCode)
     {
@@ -36,7 +36,7 @@ public class AttendeeController : Controller
 public async Task<IActionResult> BookedEvents()
 {
 //    var response = await _httpClient.GetAsync("http://localhost:8003/api/legendary-octo-events/attendee/get-attendee-tickets");
-    var response = await _httpClient.GetAsync("http://localhost:8002/api/shiny-barnacle/event/get-all");
+    var response = await _httpClient.GetAsync("http://localhost:8004/api/shiny-barnacle/event/get-all");
     Console.WriteLine(response);
     if (response.IsSuccessStatusCode)
     {
