@@ -28,7 +28,6 @@ public class AgendaController: Controller
             response.EnsureSuccessStatusCode();
 
             var responseData = await response.Content.ReadAsStringAsync();
-            Console.WriteLine(responseData);
             var jsonSettings = new JsonSerializerSettings
             {
                 DateFormatHandling = DateFormatHandling.IsoDateFormat,
@@ -125,16 +124,16 @@ public class AgendaController: Controller
             response.EnsureSuccessStatusCode(); // Throw on error response
 
             var responseData = await response.Content.ReadAsStringAsync();
-            var speaker = JsonConvert.DeserializeObject<ApiResponse<Agenda>>(responseData);
+            var agenda = JsonConvert.DeserializeObject<ApiResponse<Agenda>>(responseData);
             
-            if (speaker.Message == "Success")
+            if (agenda.Message == "Success")
             {
                 // Pass the speaker details to the view
-                var speakerdetial = speaker.Data;
-                return View(speakerdetial); 
+                var agendaData= agenda.Data;
+                return View(agendaData); 
             }
                 
-            _logger.LogError("Failed to fetch sponsors: {message}", speaker.Message);
+            _logger.LogError("Failed to fetch sponsors: {message}", agenda.Message);
             return StatusCode(500); // Return server error status code
         }
         catch (HttpRequestException ex)
@@ -145,14 +144,19 @@ public class AgendaController: Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> UpdateAgenda(Agenda speaker)
+    public async Task<IActionResult> UpdateAgenda(Agenda agenda)
     {
         try
         {
-            var json = JsonConvert.SerializeObject(speaker);
+            var jsonSettings = new JsonSerializerSettings
+            {
+                DateFormatHandling = DateFormatHandling.IsoDateFormat,
+                DateTimeZoneHandling = DateTimeZoneHandling.Utc
+            };
+            var json = JsonConvert.SerializeObject(agenda, jsonSettings);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             
-            var response = await _httpClient.PutAsync($"/api/shiny-barnacle/agenda/update/{speaker.AgendaId}", content);
+            var response = await _httpClient.PutAsync($"/api/shiny-barnacle/agenda/update/{agenda.AgendaId}", content);
             
             response.EnsureSuccessStatusCode(); // Throw on error response
             

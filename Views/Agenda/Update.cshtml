@@ -1,0 +1,34 @@
+@model Event_Burst_Web_App.Models.Agenda
+
+@{
+ViewData["Title"] = "Update Agenda";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@using (Html.BeginForm("UpdateAgenda", "Agenda", FormMethod.Post))
+{
+@Html.HiddenFor(model => model.AgendaId)
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Name)
+    @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @placeholder = "Enter agenda name" })
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Description)
+    @Html.TextBoxFor(model => model.Description, new { @class = "form-control", @placeholder = "Enter agenda description" })
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.StartTime)
+    @Html.TextBoxFor(model => model.StartTime, new { @class = "form-control datetimepicker-input", @type = "datetime-local" })
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.EndTime)
+    @Html.TextBoxFor(model => model.EndTime, new { @class = "form-control datetimepicker-input", @type = "datetime-local" })
+</div>
+
+<button type="submit" class="btn btn-primary">Update Agenda</button>
+}
