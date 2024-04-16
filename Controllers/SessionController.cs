@@ -51,9 +51,24 @@ namespace Event_Burst_Web_App.Controllers
             }
         }
 
-        public IActionResult Create()
+        [HttpGet]
+        public async Task<IActionResult> Create()
         {
-            return View();
+            // Pass the session details to the view
+            if (ModelState.IsValid)
+            {
+                // Call the getspeakersasync function
+                var session = new Session();
+                var speakers = await GetSpeakersAsync();
+                
+                // Pass the session details to the view
+                session.Speakers = speakers;
+                return View(session);
+            }
+            else
+            {
+                return View();
+            }
         }
 
         [HttpPost]
@@ -89,6 +104,34 @@ namespace Event_Burst_Web_App.Controllers
                 // Handle HTTP request exceptions
                 _logger.LogError(ex, "Error calling API");
                 return StatusCode(500); // Return server error status code
+            }
+        }
+
+        [HttpGet]
+        public async Task<List<Speaker>> GetSpeakersAsync()
+        {
+            // Get the speakers list
+            try
+            {
+                var response = await _httpClient.GetAsync("/api/shiny-barnacle/speaker/get-all");
+                response.EnsureSuccessStatusCode();
+
+                var responseData = await response.Content.ReadAsStringAsync();
+                var apiResponse = JsonConvert.DeserializeObject<ApiResponse<List<Speaker>>>(responseData);
+
+                if (apiResponse.Message == "Success")
+                {
+                    var speakers = apiResponse.Data;
+                    return speakers;
+                }
+
+                _logger.LogError("Failed to fetch speakers: {message}", apiResponse.Message);
+                return new List<Speaker>();
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine(e);
+                return new List<Speaker>();
             }
         }
 

@@ -10,7 +10,7 @@ namespace Event_Burst_Web_App.Models
         
         public int SessionId { get; set; } // Adding Session ID
 
-        public int SpeakerId { get; set; }
+        public List<Speaker> Speakers { get; set; }
 
         [Required]
         public string Name { get; set; }
