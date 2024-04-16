@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Event_Burst_Web_App.Models
 {
@@ -8,7 +9,9 @@ namespace Event_Burst_Web_App.Models
         [Key]
         public int Id { get; set; }
         
-        public int SessionId { get; set; } // Adding Session ID
+        [BsonId]
+        [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
+        public string? SessionId { get; set; } // Adding Session ID
 
         public List<Speaker> Speakers { get; set; }
         public String speakerId { get; set; }

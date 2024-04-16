@@ -174,7 +174,6 @@ namespace Event_Burst_Web_App.Controllers
             }
         }
 
-        [HttpGet]
         public async Task<IActionResult> Update(string id)
         {
             try
