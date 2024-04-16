@@ -76,7 +76,7 @@ namespace Event_Burst_Web_App.Controllers
             return View();
         }
 
-       
+     
 
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
@@ -110,6 +110,70 @@ namespace Event_Burst_Web_App.Controllers
             }
         }
 
-        
+        [HttpGet]
+
+        public async Task<IActionResult> Update(string id)
+        {
+            try
+            {
+                // Fetch the event details by ID
+                var response = await _httpClient.GetAsync($"/api/shiny-barnacle/event/get/{id}");
+                response.EnsureSuccessStatusCode(); // Throw on error response
+
+                var responseData = await response.Content.ReadAsStringAsync();
+                var eventData = JsonConvert.DeserializeObject<ApiResponse<Event>>(responseData);
+
+                if (eventData.Success == true)
+                {
+                    // Pass the event details to the view
+                    var eventDetail = eventData.Data;
+                    return View(eventDetail);
+                }
+                else
+                {
+                    _logger.LogError("Failed to fetch events: {message}", eventData.Message);
+                    return StatusCode(500); // Return server error status code
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError(ex, "Error calling API");
+                return StatusCode(500); // Return server error status code
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateEvent(Event eventData)
+        {
+            try
+            {
+                // Ensure HttpContext is available
+                var httpContext = HttpContext;
+
+                // Get cookies from the current HTTP context
+                var cookies = httpContext.Request.Cookies;
+
+                // Attach cookies to the HttpClient's DefaultRequestHeaders
+                foreach (var cookie in cookies)
+                {
+                    _httpClient.DefaultRequestHeaders.Add("Cookie", $"{cookie.Key}={cookie.Value}");
+                }
+
+                var json = JsonConvert.SerializeObject(eventData);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.PutAsync($"/api/shiny-barnacle/event/update/{eventData._id}", content);
+
+                response.EnsureSuccessStatusCode(); // Throw on error response
+
+                return RedirectToAction("Index"); // Redirect to index or another page on success
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError(ex, "Error calling API");
+                return StatusCode(500); // Return server error status code
+            }
+        }
+
     }
 }
