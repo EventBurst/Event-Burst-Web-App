@@ -76,7 +76,37 @@ namespace Event_Burst_Web_App.Controllers
             return View();
         }
 
-     
+        [HttpPost]
+        public async Task<IActionResult> Create(Event eventData)
+        {
+            try
+            {
+                var httpContext = HttpContext;
+
+                // Get cookies from the current HTTP context
+                var cookies = httpContext.Request.Cookies;
+
+                // Attach cookies to the HttpClient's DefaultRequestHeaders
+                foreach (var cookie in cookies)
+                {
+                    _httpClient.DefaultRequestHeaders.Add("Cookie", $"{cookie.Key}={cookie.Value}");
+                }
+
+                var json = JsonConvert.SerializeObject(eventData);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.PostAsync("/api/shiny-barnacle/event/create", content);
+
+                response.EnsureSuccessStatusCode(); // Throw on error response
+
+                return RedirectToAction("Index"); // Redirect to index or another page on success
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError(ex, "Error calling API");
+                return StatusCode(500); // Return server error status code
+            }
+        }
 
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
